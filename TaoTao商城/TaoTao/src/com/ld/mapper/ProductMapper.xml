@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.ld.dao.ProductDao">
+  	<select id="findHotProduct" resultType="com.ld.bean.Product">
+  		select * from product where is_hot=1 limit #{min},#{max};
+  	</select>
+  	<select id="findNewProduct" resultType="com.ld.bean.Product">
+  		select * from product order by pdate desc limit #{min},#{max};
+  	</select>
+  	<select id="getCount" resultType="int">
+  		select count(*) from product where cid=#{cid};
+  	</select>
+  	<select id="findProductByPage" resultType="com.ld.bean.Product">
+  		select * from product where cid=#{cid} limit #{index},#{currentCount};
+  	</select>
+  	<select id="findProductByPid" resultType="com.ld.bean.Product">
+  		select * from product where pid=#{pid};
+  	</select>
+  	<insert id="addOrders">
+  		insert into orders values(#{oid},#{ordertime},#{total},#{state},#{address},#{name},#{telephone},#{user.uid});
+  	</insert>
+  	<insert id="addOrderItem">
+  		insert into orderitem values(#{itemid},#{count},#{subtotal},#{product.pid},#{order.oid})
+  	</insert>
+  	<update id="updateOrder">
+  		update orders set address=#{address},name=#{name},telephone=#{telephone} where oid=#{oid}
+  	</update>
+  	<select id="findAllOrders" resultType="com.ld.bean.Order">
+  		select * from orders where uid=#{uid};
+  	</select>
+  	<select id="findOrderByOid" resultType="com.ld.bean.Order">
+  		select * from orders where oid=#{oid};
+  	</select>
+  	<select id="findAllOrderItemByOid" resultMap="OrderItem">
+  		select * from orderitem i,product p where i.pid=p.pid and i.oid=#{oid};
+  	</select>
+  	<resultMap type="com.ld.bean.OrderItem" id="OrderItem">
+  		<id property="itemid" column="itemid" />
+  		<result property="count" column="count"/>
+  		<result property="subtotal" column="subtotal"/>
+  		<association property="order" javaType="com.ld.bean.Order">
+  			<result property="oid" column="oid"/>
+  		</association>
+  		<collection property="product" ofType="com.ld.bean.Product">
+  			<id property="pid" column="pid"/>
+  			<result property="pname" column="pname"/>
+  			<result property="market_price" column="market_price"/>
+  			<result property="shop_price" column="shop_price"/>
+  			<result property="pimage" column="pimage"/>
+  			<result property="pdate" column="pdate"/>
+  			<result property="is_hot" column="is_hot"/>
+  			<result property="pdesc" column="pdesc"/>
+  			<result property="pflag" column="pflag"/>
+  		</collection>
+  	</resultMap>
+  </mapper>

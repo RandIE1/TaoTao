@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"  
+	xmlns:jee="http://www.springframework.org/schema/jee" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+	<!-- 配置dbcp数据源 --> 
+	 <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	 	<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+	 	<property name="url" value="jdbc:mysql://127.0.0.1:3306/taotao" />
+	 	<property name="username" value="root" />
+	 	<property name="password" value="2014"/>
+	 </bean>
+	 <!-- 在Spring配置MyBatis的会话工厂SqlSessionFactory
+	 		DataSource：指定数据源
+	 		mapperLocations：指定MyBatis映射文件路径
+	  -->
+	 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	 	<property name="dataSource" ref="dataSource"/>
+	 	<property name="mapperLocations" value="classpath:com/ld/mapper/*.xml"></property>
+	 </bean>
+	 <!-- MapperScannerConfigurer:使用自动扫描的形式来配置MyBatis映射器
+	 	  basePackage:指定映射接口文件所在的包路径。指定路径后，会扫描该包及其子包中的所有文件
+	  -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.ld.dao"/>
+	</bean>
+	
+	
+</beans>
